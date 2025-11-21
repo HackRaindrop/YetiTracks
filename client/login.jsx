@@ -50,9 +50,9 @@ const LoginWindow = (props) => {
       method="POST"
       className="mainForm"
     >
-      <div>
-        <label htmlFor="username" > Username: </label>
-        <input id="user" type="text" name="username" placeholder="username" />
+      <div id="loginDiv">
+        <label htmlFor="user" > Username: </label>
+        <input id="user" type="text" name="username" placeholder="username" autoComplete='on' />
         <label htmlFor="pass" > Password: </label>
         <input id="pass" type="password" name="pass" placeholder="password" />
         <input className="formSubmit" type="submit" value="Sign in" />

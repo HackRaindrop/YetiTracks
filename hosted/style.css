@@ -156,7 +156,7 @@ nav:nth-child(1) {
     font-size: 1.2em;
     width: 100px;
     background-color: #55acee;
-    border-radius: 2px;
+    border-radius: 10px;
     border-color: #66acee;
     padding: 3px 0px;
     color: white;
@@ -336,4 +336,28 @@ h3.domoLevel {
 
 .trainingArea {
     padding: 20px;
+}
+
+#loginDiv {
+    background-color: var(--secondary-color);
+    border-radius: 15px;
+    padding-left: 1em;
+    padding-top: 1em;
+}
+
+#loginDiv input {
+    margin-left: 10px;
+}
+
+#loginDiv .formSubmit {
+    margin-top: 15px;
+}
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: var(--tertiary-color);
+    padding: 10px;
 }
