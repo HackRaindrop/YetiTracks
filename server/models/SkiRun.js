@@ -3,29 +3,29 @@ const _ = require('underscore');
 
 const setName = (name) => _.escape(name).trim();
 
-const DomoSchema = new mongoose.Schema({
-  name: {
+const SkiRunSchema = new mongoose.Schema({
+  slopeName: {
     type: String,
     required: true,
     trim: true,
     set: setName,
   },
-  age: {
+  duration: {
     type: Number,
     min: 0,
     required: true,
   },
-  attack: {
+  difficulty: {
     type: Number,
     min: 0,
     required: true,
   },
-  health: {
+  verticalDrop: {
     type: Number,
     min: 0,
     required: true,
   },
-  level: {
+  speed: {
     type: Number,
     min: 1,
     required: true,
@@ -41,13 +41,14 @@ const DomoSchema = new mongoose.Schema({
   },
 });
 
-DomoSchema.statics.toAPI = (doc) => ({
-  name: doc.name,
-  age: doc.age,
-  attack: doc.attack,
-  health: doc.health,
-  level: doc.level,
+SkiRunSchema.statics.toAPI = (doc) => ({
+  slopeName: doc.slopeName,
+  duration: doc.duration,
+  difficulty: doc.difficulty,
+  verticalDrop: doc.verticalDrop,
+  speed: doc.speed,
 });
 
-const DomoModel = mongoose.model('Domo', DomoSchema);
-module.exports = DomoModel;
+const SkiRunModel = mongoose.model('SkiRun', SkiRunSchema);
+module.exports = SkiRunModel;
+

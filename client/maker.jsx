@@ -3,106 +3,106 @@ const React = require('react');
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
 
-const handleDomo = (e, onDomoAdded) => {
+const handleSkiRun = (e, onSkiRunAdded) => {
     e.preventDefault();
     helper.hideError();
 
-    const name = e.target.querySelector('#domoName').value;
-    const age = e.target.querySelector('#domoAge').value;
-    const attack = e.target.querySelector('#domoAttack').value;
-    const health = e.target.querySelector('#domoHealth').value;
-    const level = e.target.querySelector('#domoLevel').value;
+    const slopeName = e.target.querySelector('#skiRunSlopeName').value;
+    const duration = e.target.querySelector('#skiRunDuration').value;
+    const difficulty = e.target.querySelector('#skiRunDifficulty').value;
+    const verticalDrop = e.target.querySelector('#skiRunVerticalDrop').value;
+    const speed = e.target.querySelector('#skiRunSpeed').value;
 
-    if (!name || !age || !attack || !health || !level) {
+    if (!slopeName || !duration || !difficulty || !verticalDrop || !speed) {
         helper.handleError("All fields are required!");
         return false;
     }
 
-    helper.sendPost(e.target.action, { name, age, attack, health, level }, onDomoAdded);
+    helper.sendPost(e.target.action, { slopeName, duration, difficulty, verticalDrop, speed }, onSkiRunAdded);
     return false;
 };
 
-const DomoForm = (props) => {
+const SkiRunForm = (props) => {
     return (
-        <form id='domoForm'
-            onSubmit={(e) => handleDomo(e, props.triggerReload)}
-            name='domoForm'
+        <form id='skiRunForm'
+            onSubmit={(e) => handleSkiRun(e, props.triggerReload)}
+            name='skiRunForm'
             action='/maker'
             method='POST'
-            className='domoForm'
+            className='skiRunForm'
         >
-            <label htmlFor='name'>Name: </label>
-            <input id='domoName' type='text' name='name' placeholder='Domo Name' />
+            <label htmlFor='slopeName'>Slope Name: </label>
+            <input id='skiRunSlopeName' type='text' name='slopeName' placeholder='Slope Name' />
 
-            <label htmlFor='age'>Age: </label>
-            <input id='domoAge' type='number' min='0' name='age' />
+            <label htmlFor='duration'>Duration (min): </label>
+            <input id='skiRunDuration' type='number' min='0' name='duration' />
 
-            <label htmlFor='attack'>Attack: </label>
-            <input id='domoAttack' type='number' min='0' name='attack' />
+            <label htmlFor='difficulty'>Difficulty (1-10): </label>
+            <input id='skiRunDifficulty' type='number' min='0' max='10' name='difficulty' />
 
-            <label htmlFor='health'>Health: </label>
-            <input id='domoHealth' type='number' min='0' name='health' />
+            <label htmlFor='verticalDrop'>Vertical Drop (ft): </label>
+            <input id='skiRunVerticalDrop' type='number' min='0' name='verticalDrop' />
 
-            <label htmlFor='level'>Level: </label>
-            <input id='domoLevel' type='number' min='1' name='level' />
+            <label htmlFor='speed'>Speed (mph): </label>
+            <input id='skiRunSpeed' type='number' min='1' name='speed' />
 
-            <input className='makeDomoSubmit' type='submit' value='Make a Domo' />
+            <input className='makeSkiRunSubmit' type='submit' value='Log Ski Run' />
         </form>
     );
 };
 
-const DomoList = (props) => {
-    const [domos, setDomos] = useState(props.domos);
+const SkiRunList = (props) => {
+    const [skiRuns, setSkiRuns] = useState(props.skiRuns);
 
     useEffect(() => {
-        const loadDomosFromServer = async () => {
-            const response = await fetch('/getDomos');
+        const loadSkiRunsFromServer = async () => {
+            const response = await fetch('/getSkiRuns');
             const data = await response.json();
-            setDomos(data.domos);
+            setSkiRuns(data.skiRuns);
         };
-        loadDomosFromServer();
-    }, [props.reloadDomos]);
+        loadSkiRunsFromServer();
+    }, [props.reloadSkiRuns]);
 
-    if (domos.length === 0) {
+    if (skiRuns.length === 0) {
         return (
-            <div className='domoList'>
-                <h3 className='emptyDomo'>No Domos Yet! </h3>
+            <div className='skiRunList'>
+                <h3 className='emptySkiRun'>No Ski Runs Yet! </h3>
             </div>
         );
     }
 
-    const domoNodes = domos.map(domo => {
+    const skiRunNodes = skiRuns.map(skiRun => {
         return (
-            <div key={domo.id} className='domo'>
-                <img src='assets/img/domoface.jpeg' alt='domo face' className='domoFace' />
+            <div key={skiRun.id} className='skiRun'>
+                <img src='assets/img/yeti.png' alt='yeti icon' className='skiRunIcon' />
                 <div>
-                    <h3 className='domoName'>{domo.name}</h3>
-                    <h3 className='domoAge'>Age: {domo.age}</h3>
-                    <h3 className='domoLevel'>Level: {domo.level}</h3>
-                    <h3 className='domoAttack'>Attack: {domo.attack}</h3>
-                    <h3 className='domoHealth'>Health: {domo.health}</h3>
+                    <h3 className='skiRunSlopeName'>{skiRun.slopeName}</h3>
+                    <h3 className='skiRunDuration'>Duration: {skiRun.duration} min</h3>
+                    <h3 className='skiRunSpeed'>Speed: {skiRun.speed} mph</h3>
+                    <h3 className='skiRunDifficulty'>Difficulty: {skiRun.difficulty}/10</h3>
+                    <h3 className='skiRunVerticalDrop'>Vertical Drop: {skiRun.verticalDrop} ft</h3>
                 </div>
             </div>
         );
     });
 
     return (
-        <div className='domoList'>
-            {domoNodes}
+        <div className='skiRunList'>
+            {skiRunNodes}
         </div>
     );
 };
 
 const App = () => {
-    const [reloadDomos, setReloadDomos] = useState(false);
+    const [reloadSkiRuns, setReloadSkiRuns] = useState(false);
 
     return (
         <div>
-            <div id='makeDomo'>
-                <DomoForm triggerReload={() => setReloadDomos(!reloadDomos)} />
+            <div id='makeSkiRun'>
+                <SkiRunForm triggerReload={() => setReloadSkiRuns(!reloadSkiRuns)} />
             </div>
-            <div id='domos'>
-                <DomoList domos={[]} reloadDomos={reloadDomos} />
+            <div id='skiRuns'>
+                <SkiRunList skiRuns={[]} reloadSkiRuns={reloadSkiRuns} />
             </div>
         </div>
     );
