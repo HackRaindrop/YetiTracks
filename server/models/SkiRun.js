@@ -51,4 +51,3 @@ SkiRunSchema.statics.toAPI = (doc) => ({
 
 const SkiRunModel = mongoose.model('SkiRun', SkiRunSchema);
 module.exports = SkiRunModel;
-

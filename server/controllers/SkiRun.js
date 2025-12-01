@@ -3,7 +3,8 @@ const models = require('../models');
 const { SkiRun } = models;
 
 const makeSkiRun = async (req, res) => {
-  if (!req.body.slopeName || !req.body.duration || !req.body.difficulty || !req.body.verticalDrop || !req.body.speed) {
+  if (!req.body.slopeName || !req.body.duration || !req.body.difficulty
+    || !req.body.verticalDrop || !req.body.speed) {
     return res.status(400).json({ error: 'All parameters are required' });
   }
 
@@ -53,4 +54,3 @@ module.exports = {
   getSkiRuns,
   makerPage,
 };
-
