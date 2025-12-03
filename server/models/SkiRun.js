@@ -16,8 +16,7 @@ const SkiRunSchema = new mongoose.Schema({
     required: true,
   },
   difficulty: {
-    type: Number,
-    min: 0,
+    type: String,
     required: true,
   },
   verticalDrop: {

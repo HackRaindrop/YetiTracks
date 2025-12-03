@@ -2,6 +2,7 @@ const helper = require('./helper.js');
 const React = require('react');
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
+const { decode } = require('html-entities')
 
 const handleSkiRun = (e, onSkiRunAdded) => {
     e.preventDefault();
@@ -37,8 +38,14 @@ const SkiRunForm = (props) => {
             <label htmlFor='duration'>Duration (min): </label>
             <input id='skiRunDuration' type='number' min='0' name='duration' />
 
-            <label htmlFor='difficulty'>Difficulty (1-10): </label>
-            <input id='skiRunDifficulty' type='number' min='0' max='10' name='difficulty' />
+            <label htmlFor='difficulty'>Difficulty: </label>
+            <select id='skiRunDifficulty' name='difficulty'>
+                <option value='Green'>Green</option>
+                <option value='Blue'>Blue</option>
+                <option value='Black'>Black</option>
+                <option value='Double Black'>Double Black</option>
+                <option value='Off Piste'>Off Piste</option>
+            </select>
 
             <label htmlFor='verticalDrop'>Vertical Drop (ft): </label>
             <input id='skiRunVerticalDrop' type='number' min='0' name='verticalDrop' />
@@ -72,14 +79,26 @@ const SkiRunList = (props) => {
     }
 
     const skiRunNodes = skiRuns.map(skiRun => {
+        const runDifficulty = () => {
+            switch (skiRun.difficulty) {
+                case 'Green':
+                    return 'assets/img/greenCircle.png';
+                case 'Blue':
+                    return 'assets/img/blueSquare.png';
+                case 'Black':
+                    return 'assets/img/blackDiamond.png';
+                case 'Double Black':
+                    return <img src='assets/img/blackDiamond.png' alt='black diamond' />
+            }
+        }
         return (
             <div key={skiRun.id} className='skiRun'>
                 <img src='assets/img/yeti.png' alt='yeti icon' className='skiRunIcon' />
                 <div>
-                    <h3 className='skiRunSlopeName'>{skiRun.slopeName}</h3>
+                    <h3 className='skiRunSlopeName'>{decode(skiRun.slopeName)}</h3>
                     <h3 className='skiRunDuration'>Duration: {skiRun.duration} min</h3>
                     <h3 className='skiRunSpeed'>Speed: {skiRun.speed} mph</h3>
-                    <h3 className='skiRunDifficulty'>Difficulty: {skiRun.difficulty}/10</h3>
+                    <h3 className='skiRunDifficulty'>Difficulty: {runDifficulty}</h3>
                     <h3 className='skiRunVerticalDrop'>Vertical Drop: {skiRun.verticalDrop} ft</h3>
                 </div>
             </div>

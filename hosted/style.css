@@ -20,7 +20,8 @@ body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    background-color: var(--white);
+    background: #2A7B9B;
+    background: linear-gradient(0deg, rgba(42, 123, 155, .6) 0%, rgba(87, 188, 199, .6) 50%, rgba(230, 240, 240, .6) 100%);
     font-family: 'Quicksand', sans-serif;
 }
 
