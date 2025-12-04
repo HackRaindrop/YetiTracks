@@ -82,15 +82,24 @@ const SkiRunList = (props) => {
         const runDifficulty = () => {
             switch (skiRun.difficulty) {
                 case 'Green':
-                    return 'assets/img/greenCircle.png';
+                    return <img src='assets/img/greenCircle.png' alt='Green' className='difficultyIcon' />;
                 case 'Blue':
-                    return 'assets/img/blueSquare.png';
+                    return <img src='assets/img/blueSquare.png' alt='Blue' className='difficultyIcon' />;
                 case 'Black':
-                    return 'assets/img/blackDiamond.png';
+                    return <img src='assets/img/blackDiamond.png' alt='Black' className='difficultyIcon' />;
                 case 'Double Black':
-                    return <img src='assets/img/blackDiamond.png' alt='black diamond' />
+                    return (
+                        <>
+                            <img src='assets/img/blackDiamond.png' alt='Double Black' className='difficultyIcon' />
+                            <img src='assets/img/blackDiamond.png' alt='Double Black' className='difficultyIcon' />
+                        </>
+                    );
+                case 'Off Piste':
+                    return <span className='offPiste'>Off Piste</span>;
+                default:
+                    return null;
             }
-        }
+        };
         return (
             <div key={skiRun.id} className='skiRun'>
                 <img src='assets/img/yeti.png' alt='yeti icon' className='skiRunIcon' />
@@ -98,7 +107,7 @@ const SkiRunList = (props) => {
                     <h3 className='skiRunSlopeName'>{decode(skiRun.slopeName)}</h3>
                     <h3 className='skiRunDuration'>Duration: {skiRun.duration} min</h3>
                     <h3 className='skiRunSpeed'>Speed: {skiRun.speed} mph</h3>
-                    <h3 className='skiRunDifficulty'>Difficulty: {runDifficulty}</h3>
+                    <h3 className='skiRunDifficulty'>Difficulty: {runDifficulty()}</h3>
                     <h3 className='skiRunVerticalDrop'>Vertical Drop: {skiRun.verticalDrop} ft</h3>
                 </div>
             </div>

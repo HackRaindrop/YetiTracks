@@ -38,6 +38,8 @@ const makeSkiRun = async (req, res) => {
 
 const makerPage = (req, res) => res.render('app');
 
+const statsPage = (req, res) => res.render('stats');
+
 const getSkiRuns = async (req, res) => {
   try {
     const query = { owner: req.session.account._id };
@@ -53,4 +55,5 @@ module.exports = {
   makeSkiRun,
   getSkiRuns,
   makerPage,
+  statsPage,
 };

@@ -4,6 +4,7 @@ module.exports = {
   entry: {
     app: './client/maker.jsx',
     login: './client/login.jsx',
+    stats: './client/stats.jsx',
   },
   module: {
     rules: [
@@ -23,5 +24,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'hosted'),
     filename: '[name]Bundle.js',
+  },
+  performance: {
+    hints: false,
   },
 };

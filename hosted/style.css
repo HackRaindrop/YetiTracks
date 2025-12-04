@@ -304,6 +304,21 @@ h3.skiRunSpeed {
     color: black;
 }
 
+.difficultyIcon {
+    height: 28px;
+    width: 28px;
+    vertical-align: middle;
+    margin-right: 2px;
+}
+
+.offPiste {
+    font-weight: bold;
+    color: #333;
+    background-color: #ffcc00;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
 .skiRun:first-child {
     margin-top: 10px;
 }
@@ -332,4 +347,179 @@ footer {
     width: 100%;
     background-color: var(--tertiary-color);
     padding: 10px;
+}
+
+/* Stats Page Styles */
+.stats-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 15px;
+    padding-bottom: 70px;
+}
+
+.stats-header {
+    text-align: center;
+    font-size: 2em;
+    color: var(--black);
+    margin-bottom: 8px;
+}
+
+.stats-empty {
+    text-align: center;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.back-link {
+    display: block;
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 1em;
+    margin-bottom: 15px;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Summary Stats */
+.summary-stats {
+    background-color: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.stat-card {
+    background-color: var(--secondary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+    color: var(--black);
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.9em;
+}
+
+/* Charts */
+.charts-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.chart-container {
+    background-color: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.chart-title {
+    margin: 0 0 10px 0;
+    color: var(--black);
+    font-size: 1.2em;
+    text-align: center;
+}
+
+/* Bar Chart (legacy, not used with recharts) */
+.bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bar-label {
+    width: 100px;
+    font-size: 0.85em;
+    color: #333;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bar-track {
+    flex: 1;
+    height: 25px;
+    background: #ddd;
+    border: 1px solid #aaa;
+}
+
+.bar-fill {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 5px;
+    min-width: 35px;
+}
+
+.bar-value {
+    color: white;
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+/* Custom Tooltip for Recharts */
+.custom-tooltip {
+    background: white;
+    border: 1px solid #999;
+    padding: 8px 10px;
+}
+
+.tooltip-label {
+    margin: 0 0 3px 0;
+    font-weight: bold;
+    color: #333;
+}
+
+.tooltip-value {
+    margin: 0;
+    color: #555;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .charts-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .bar-label {
+        width: 70px;
+        font-size: 0.75em;
+    }
 }

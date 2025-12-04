@@ -14,6 +14,8 @@ const router = (app) => {
   app.get('/maker', mid.requiresLogin, controllers.SkiRun.makerPage);
   app.post('/maker', mid.requiresLogin, controllers.SkiRun.makeSkiRun);
 
+  app.get('/stats', mid.requiresLogin, controllers.SkiRun.statsPage);
+
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 
