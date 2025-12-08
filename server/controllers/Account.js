@@ -57,9 +57,37 @@ const signup = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  const username = `${req.body.username}`;
+  const pass = `${req.body.pass}`;
+  const newPass = `${req.body.newPass}`;
+
+  if (!username || !pass || !newPass) {
+    return res.status(400).json({ error: 'All fields are required!' });
+  }
+
+  return Account.authenticate(username, pass, async (err, account) => {
+    if (err || !account) {
+      return res.status(401).json({ error: 'Invalid username or passworld' });
+    }
+
+    try {
+      const hash = await Account.generateHash(newPass);
+      await Account.findByIdAndUpdate(account._id, { password: hash });
+      const updatedAccount = await Account.findById(account._id);
+      req.session.account = Account.toAPI(updatedAccount);
+      return res.json({ redirect: '/maker' });
+    } catch (e) {
+      console.error(e);
+      return res.status(500).json({ error: 'An internal error occurred' });
+    }
+  });
+};
+
 module.exports = {
   loginPage,
   accountManagementPage,
+  changePassword,
   logout,
   login,
   signup,

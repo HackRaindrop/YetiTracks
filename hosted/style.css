@@ -178,7 +178,8 @@ nav:nth-child(1) {
 
 #user,
 #pass,
-#pass2 {
+#pass2,
+#newPass {
     text-align: center;
     font-size: 1.1em;
     width: 180px;
@@ -187,7 +188,7 @@ nav:nth-child(1) {
 
 #user:focus,
 #pass:focus,
-#pass2:focus {
+#pass2:focus #newPass:focus {
     outline: none;
     box-shadow: 0px 0px 1px 1px #55acee;
 }
@@ -329,7 +330,8 @@ h3.skiRunSpeed {
 
 
 #loginDiv,
-#signupDiv {
+#signupDiv,
+#passwordChange {
     background-color: rgba(161, 198, 234, 0.7);
     border-radius: 15px;
     padding: 1em 0px 1em 1em;
@@ -507,7 +509,7 @@ footer {
     .charts-row {
         grid-template-columns: 1fr;
     }
-    
+
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -517,7 +519,7 @@ footer {
     .stats-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .bar-label {
         width: 70px;
         font-size: 0.75em;

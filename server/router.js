@@ -17,6 +17,7 @@ const router = (app) => {
   app.get('/stats', mid.requiresLogin, controllers.SkiRun.statsPage);
 
   app.get('/accountManagement', mid.requiresSecure, mid.requiresLogin, controllers.Account.accountManagementPage);
+  app.post('/changePassword', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassword);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
