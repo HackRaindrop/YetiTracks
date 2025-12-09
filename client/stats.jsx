@@ -1,3 +1,4 @@
+//Stats page - displays charts and statistics for ski runs
 const React = require('react');
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
@@ -7,7 +8,37 @@ const {
     PieChart, Pie, Cell
 } = require('recharts');
 
-// Colors for pie chart
+//Ad placeholder for free users
+const AdBanner = ({ isPremium }) => {
+    if (isPremium) return null;
+    
+    return (
+        <div className="ad-banner">
+            <div className="ad-content">
+                <span className="ad-label">Advertisement</span>
+                <div className="ad-placeholder">
+                    <p>Your Ad Here</p>
+                    <p className="ad-size">Banner Ad (728x90)</p>
+                </div>
+                <a href="/premium" className="ad-remove">Remove ads with Premium</a>
+            </div>
+        </div>
+    );
+};
+
+//Locked chart overlay for non-premium users
+const LockedChart = ({ title }) => (
+    <div className="chart-container locked-chart">
+        <h3 className="chart-title">{title}</h3>
+        <div className="locked-overlay">
+            <p className="locked-text">Premium Feature</p>
+            <p className="locked-subtext">Upgrade to Premium to unlock this chart</p>
+            <a href="/premium" className="locked-btn">View Premium</a>
+        </div>
+    </div>
+);
+
+//Color mapping for difficulty levels
 const DIFFICULTY_COLORS = {
     'Green': '#2ecc71',
     'Blue': '#3498db',
@@ -16,7 +47,7 @@ const DIFFICULTY_COLORS = {
     'Off Piste': '#f39c12'
 };
 
-// Custom tooltip for bar charts
+//Custom tooltip component for bar charts
 const CustomBarTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
         return (
@@ -29,7 +60,7 @@ const CustomBarTooltip = ({ active, payload, label }) => {
     return null;
 };
 
-// Duration Bar Chart
+//Bar chart showing duration per run
 const DurationChart = ({ data }) => {
     if (!data || data.length === 0) return null;
 
@@ -60,7 +91,7 @@ const DurationChart = ({ data }) => {
     );
 };
 
-// Vertical Drop Bar Chart
+//Bar chart showing vertical drop per run
 const VerticalDropChart = ({ data }) => {
     if (!data || data.length === 0) return null;
 
@@ -91,7 +122,7 @@ const VerticalDropChart = ({ data }) => {
     );
 };
 
-// Speed Bar Chart
+//Bar chart showing speed per run
 const SpeedChart = ({ data }) => {
     if (!data || data.length === 0) return null;
 
@@ -122,13 +153,13 @@ const SpeedChart = ({ data }) => {
     );
 };
 
-// Difficulty Pie Chart
+//Pie chart showing run distribution by difficulty
 const DifficultyPieChart = ({ data }) => {
     if (!data || data.length === 0) return null;
 
     const difficulties = ['Green', 'Blue', 'Black', 'Double Black', 'Off Piste'];
 
-    // Count runs by difficulty
+    //Count runs per difficulty
     const counts = {};
     difficulties.forEach(d => counts[d] = 0);
     data.forEach(run => {
@@ -145,6 +176,7 @@ const DifficultyPieChart = ({ data }) => {
             color: DIFFICULTY_COLORS[difficulty]
         }));
 
+    //Custom label with percentage
     const renderCustomLabel = ({ name, percent }) => {
         return `${name} (${(percent * 100).toFixed(0)}%)`;
     };
@@ -175,10 +207,11 @@ const DifficultyPieChart = ({ data }) => {
     );
 };
 
-// Summary Stats Component
+//Summary stats cards component
 const SummaryStats = ({ data }) => {
     if (!data || data.length === 0) return null;
 
+    //Calculate stats
     const totalRuns = data.length;
     const totalDuration = data.reduce((sum, run) => sum + run.duration, 0);
     const totalVertical = data.reduce((sum, run) => sum + run.verticalDrop, 0);
@@ -219,25 +252,34 @@ const SummaryStats = ({ data }) => {
     );
 };
 
-// Main Stats Page Component
+//Main stats page component
 const StatsPage = () => {
     const [skiRuns, setSkiRuns] = useState([]);
+    const [isPremium, setIsPremium] = useState(false);
     const [loading, setLoading] = useState(true);
 
+    //Fetch data on mount
     useEffect(() => {
-        const loadSkiRuns = async () => {
+        const loadData = async () => {
             try {
-                const response = await fetch('/getSkiRuns');
-                const data = await response.json();
-                setSkiRuns(data.skiRuns);
+                //Parallel fetch for runs and premium status
+                const [runsResponse, premiumResponse] = await Promise.all([
+                    fetch('/getSkiRuns'),
+                    fetch('/getPremiumStatus')
+                ]);
+                const runsData = await runsResponse.json();
+                const premiumData = await premiumResponse.json();
+                setSkiRuns(runsData.skiRuns);
+                setIsPremium(premiumData.isPremium);
             } catch (err) {
-                console.error('Error loading ski runs:', err);
+                console.error('Error loading data:', err);
             }
             setLoading(false);
         };
-        loadSkiRuns();
+        loadData();
     }, []);
 
+    //Loading state
     if (loading) {
         return (
             <div className="stats-container">
@@ -246,6 +288,7 @@ const StatsPage = () => {
         );
     }
 
+    //Empty state
     if (skiRuns.length === 0) {
         return (
             <div className="stats-container">
@@ -256,17 +299,30 @@ const StatsPage = () => {
         );
     }
 
+    //Render charts (some locked for free users)
     return (
         <div className="stats-container">
+            <AdBanner isPremium={isPremium} />
+            
             <h2 className="stats-header">Your Ski Statistics</h2>
             <a href="/maker" className="back-link">← Back to Logger</a>
 
             <SummaryStats data={skiRuns} />
 
             <div className="charts-row">
-                <DurationChart data={skiRuns} />
-                <VerticalDropChart data={skiRuns} />
+                {isPremium ? (
+                    <DurationChart data={skiRuns} />
+                ) : (
+                    <LockedChart title="Duration by Run (min)" />
+                )}
+                {isPremium ? (
+                    <VerticalDropChart data={skiRuns} />
+                ) : (
+                    <LockedChart title="Vertical Drop by Run (ft)" />
+                )}
             </div>
+
+            <AdBanner isPremium={isPremium} />
 
             <div className="charts-row">
                 <SpeedChart data={skiRuns} />
@@ -276,6 +332,7 @@ const StatsPage = () => {
     );
 };
 
+//Initialize React app
 const init = () => {
     const root = createRoot(document.getElementById('app'));
     root.render(<StatsPage />);

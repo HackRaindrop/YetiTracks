@@ -1,15 +1,21 @@
+//Account controller - handles auth and premium features
 const models = require('../models');
 
 const { Account } = models;
 
+//Render login page
 const loginPage = (req, res) => res.render('login');
+
+//Render account management page
 const accountManagementPage = (req, res) => res.render('accountManagement');
 
+//Logout and destroy session
 const logout = (req, res) => {
   req.session.destroy();
   return res.redirect('/');
 };
 
+//Authenticate user login
 const login = (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -24,11 +30,11 @@ const login = (req, res) => {
     }
 
     req.session.account = Account.toAPI(account);
-
     return res.json({ redirect: '/maker' });
   });
 };
 
+//Create new user account
 const signup = async (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -57,6 +63,7 @@ const signup = async (req, res) => {
   }
 };
 
+//Change user password
 const changePassword = async (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -84,6 +91,47 @@ const changePassword = async (req, res) => {
   });
 };
 
+//Render premium page
+const premiumPage = (req, res) => res.render('premium');
+
+//Get user's premium status
+const getPremiumStatus = async (req, res) => {
+  try {
+    const account = await Account.findById(req.session.account._id);
+    return res.json({ isPremium: account.premiumUser });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Error checking premium status' });
+  }
+};
+
+//Upgrade to premium (proof of concept)
+const upgradeToPremium = async (req, res) => {
+  try {
+    await Account.findByIdAndUpdate(req.session.account._id, { premiumUser: true });
+    return res.json({ message: 'Successfully upgraded to Premium!' });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Error upgrading to premium' });
+  }
+};
+
+//Toggle premium on/off (for demo)
+const togglePremium = async (req, res) => {
+  try {
+    const account = await Account.findById(req.session.account._id);
+    const newStatus = !account.premiumUser;
+    await Account.findByIdAndUpdate(req.session.account._id, { premiumUser: newStatus });
+    return res.json({
+      isPremium: newStatus,
+      message: newStatus ? 'Premium activated!' : 'Premium deactivated',
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Error toggling premium' });
+  }
+};
+
 module.exports = {
   loginPage,
   accountManagementPage,
@@ -91,4 +139,8 @@ module.exports = {
   logout,
   login,
   signup,
+  premiumPage,
+  getPremiumStatus,
+  upgradeToPremium,
+  togglePremium,
 };
